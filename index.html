@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wattage calculator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #090d12;
+  --panel: #111821;
+  --panel2: #17212c;
+  --border: #25313e;
+  --text: #f1f5f9;
+  --muted: #8493a5;
+  --green: #a3f56b;
+  --green2: #74d43c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -20%, #263b2a 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.container {
+  max-width: 1050px;
+  margin: auto;
+  padding: 35px 22px 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 65px;
+}
+
+.logo {
+  font: 700 25px 'Space Grotesk', sans-serif;
+  letter-spacing: -1px;
+}
+
+.logo span { color: var(--green); }
+
+.status {
+  color: var(--green);
+  font-size: 12px;
+  background: #a3f56b12;
+  border: 1px solid #a3f56b35;
+  border-radius: 30px;
+  padding: 8px 13px;
+}
+
+.hero { text-align: center; margin-bottom: 38px; }
+
+.eyebrow {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
+
+h1 {
+  font: 700 clamp(35px, 6vw, 57px) 'Space Grotesk', sans-serif;
+  letter-spacing: -2.5px;
+  margin: 0;
+}
+
+h1 span { color: var(--green); }
+
+.hero p {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+  max-width: 480px;
+  margin: 15px auto 0;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.card {
+  background: linear-gradient(145deg, #151e28, #101720);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 27px;
+}
+
+.card-title {
+  font: 600 17px 'Space Grotesk';
+  margin-bottom: 7px;
+}
+
+.card-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 25px;
+}
+
+.field { margin-bottom: 21px; }
+
+label {
+  display: block;
+  font-size: 12px;
+  color: #a9b6c5;
+  margin-bottom: 9px;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  background: #0b1118;
+  border: 1px solid #293746;
+  border-radius: 10px;
+  transition: .2s;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px #a3f56b12;
+}
+
+.input-wrap input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  padding: 14px;
+  color: white;
+  font: 600 16px 'Space Grotesk';
+}
+
+.input-wrap .unit {
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+select {
+  background: #0b1118;
+  color: white;
+  border: 1px solid #293746;
+  border-radius: 10px;
+  padding: 13px;
+  width: 100%;
+  font: inherit;
+  outline: none;
+}
+
+.device-name {
+  margin-top: 18px;
+}
+
+.device-name input {
+  width: 100%;
+  background: #0b1118;
+  border: 1px solid #293746;
+  border-radius: 10px;
+  padding: 13px;
+  color: white;
+  outline: none;
+  font: inherit;
+}
+
+.result-card {
+  grid-column: 1 / -1;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 0%, #a3f56b15, transparent 65%),
+    linear-gradient(145deg, #151f25, #101720);
+  border: 1px solid #49643b;
+  padding: 38px 25px;
+}
+
+.result-label {
+  color: #b1c0ad;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.result {
+  font: 700 clamp(45px, 9vw, 72px) 'Space Grotesk';
+  color: var(--green);
+  letter-spacing: -3px;
+  margin: 12px 0 5px;
+  overflow-wrap: anywhere;
+}
+
+.result-caption {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.stat {
+  background: #0b121a99;
+  border: 1px solid #293746;
+  padding: 17px 10px;
+  border-radius: 12px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font: 600 19px 'Space Grotesk';
+  overflow-wrap: anywhere;
+}
+
+.stat-value small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.breakdown {
+  grid-column: 1 / -1;
+}
+
+.breakdown h2 {
+  font: 600 18px 'Space Grotesk';
+  margin: 0 0 20px;
+}
+
+.break-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.break-row:last-child { border: 0; }
+.break-row span:first-child { color: var(--muted); }
+.break-row strong { text-align: right; }
+
+.note {
+  text-align: center;
+  color: #627184;
+  font-size: 11px;
+  margin-top: 30px;
+  line-height: 1.8;
+}
+
+@media(max-width: 650px) {
+  .container { padding: 22px 15px 40px; }
+  header { margin-bottom: 45px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .result-card, .breakdown { grid-column: 1; }
+  .stats { gap: 7px; }
+  .stat { padding: 13px 6px; }
+  .stat-value { font-size: 15px; }
+  h1 { letter-spacing: -1.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">Watt<span>Wise.</span></div>
+  <div class="status">● LIVE CALCULATOR</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">ELECTRICITY COST ESTIMATOR</div>
+  <h1>Know what you <span>consume.</span></h1>
+  <p>Calculate exactly how much your appliances cost to run. No guessing, just simple electricity math.</p>
+</section>
+
+<main class="dashboard">
+
+  <section class="card">
+    <div class="card-title">01 / Electricity rate</div>
+    <div class="card-subtitle">How much does your electricity provider charge?</div>
+
+    <div class="field">
+      <label>PRICE PER KILOWATT-HOUR</label>
+      <div class="input-wrap">
+        <input id="rate" type="number" min="0" step="any" value="0.09">
+        <span class="unit">/ kWh</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>CURRENCY</label>
+      <select id="currency">
+        <option value="EUR">€ — Euro</option>
+        <option value="USD">$ — US Dollar</option>
+        <option value="GBP">£ — British Pound</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">02 / Your device</div>
+    <div class="card-subtitle">Enter the power consumption and usage time.</div>
+
+    <div class="field">
+      <label>POWER CONSUMPTION</label>
+      <div class="input-wrap">
+        <input id="watts" type="number" min="0" step="any" value="200">
+        <span class="unit">WATTS</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>USAGE DURATION</label>
+      <div class="input-wrap">
+        <input id="hours" type="number" min="0" step="any" value="1000">
+        <span class="unit">HOURS</span>
+      </div>
+    </div>
+
+    <div class="device-name">
+      <label>DEVICE NAME (OPTIONAL)</label>
+      <input id="device" type="text" placeholder="e.g. Gaming PC">
+    </div>
+  </section>
+
+  <section class="card result-card">
+    <div class="result-label">TOTAL ELECTRICITY COST</div>
+    <div class="result" id="total">€18.00</div>
+    <div class="result-caption" id="caption">Your device's total running cost</div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">ENERGY USED</div>
+        <div class="stat-value" id="energy">200 <small>kWh</small></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">COST PER HOUR</div>
+        <div class="stat-value" id="perHour">€0.018</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">POWER</div>
+        <div class="stat-value" id="power">200 <small>W</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card breakdown">
+    <h2>Cost breakdown</h2>
+    <div class="break-row">
+      <span>Daily cost (24 hours)</span>
+      <strong id="daily">€0.432</strong>
+    </div>
+    <div class="break-row">
+      <span>30-day cost (24/7)</span>
+      <strong id="monthly">€12.96</strong>
+    </div>
+    <div class="break-row">
+      <span>Yearly cost (24/7)</span>
+      <strong id="yearly">€157.68</strong>
+    </div>
+    <div class="break-row">
+      <span>Total operating time</span>
+      <strong id="duration">1,000 hours</strong>
+    </div>
+  </section>
+
+</main>
+
+<footer class="note">
+  WATTWISE © 2026 · MADE FOR SMARTER ENERGY USAGE<br>
+  Estimates exclude fixed charges, taxes and other additional fees.
+</footer>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const inputs = ['rate', 'watts', 'hours', 'currency', 'device'];
+
+function money(value, currency) {
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 6
+  }).format(value);
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: 3
+  }).format(value);
+}
+
+function calculate() {
+  const rate = Math.max(0, Number($('rate').value) || 0);
+  const watts = Math.max(0, Number($('watts').value) || 0);
+  const hours = Math.max(0, Number($('hours').value) || 0);
+  const currency = $('currency').value;
+
+  // W × hours / 1000 = kWh
+  const energy = watts * hours / 1000;
+
+  // kWh × price = total cost
+  const total = energy * rate;
+
+  const hourly = watts / 1000 * rate;
+  const daily = hourly * 24;
+  const monthly = daily * 30;
+  const yearly = daily * 365;
+
+  const device = $('device').value.trim();
+
+  $('total').textContent = money(total, currency);
+  $('caption').textContent = device
+    ? `Total cost of running your ${device}`
+    : "Your device's total running cost";
+
+  $('energy').innerHTML =
+    `${formatNumber(energy)} <small>kWh</small>`;
+
+  $('perHour').textContent = money(hourly, currency);
+
+  $('power').innerHTML =
+    `${formatNumber(watts)} <small>W</small>`;
+
+  $('daily').textContent = money(daily, currency);
+  $('monthly').textContent = money(monthly, currency);
+  $('yearly').textContent = money(yearly, currency);
+
+  $('duration').textContent =
+    `${formatNumber(hours)} hours`;
+}
+
+inputs.forEach(id => {
+  $(id).addEventListener('input', calculate);
+  $(id).addEventListener('change', calculate);
+});
+
+calculate();
+</script>
+</body>
+</html>
